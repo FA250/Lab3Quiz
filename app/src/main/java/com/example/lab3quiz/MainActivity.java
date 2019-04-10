@@ -1,12 +1,15 @@
 package com.example.lab3quiz;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -28,6 +31,7 @@ import org.jsoup.select.Elements;
 public class MainActivity extends AppCompatActivity {
     String[] NombresPersonajes;
     Bitmap[] ImagenesPersonajes;
+    String RespuestaCorrecta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +131,32 @@ public class MainActivity extends AppCompatActivity {
             btnOpcion3.setText(NombresPersonajes[random.nextInt(NombresPersonajes.length)]);
             btnOpcion4.setText(NombresPersonajes[numPregunta]);
         }
+        RespuestaCorrecta=NombresPersonajes[numPregunta];
+    }
+
+    public void verificarRespuesta(View view) {
+        Button btnRespuesta= (Button) view;
+        if(RespuestaCorrecta== btnRespuesta.getText().toString())
+            new AlertDialog.Builder(this)
+                    .setTitle("¡Respuesta correcta!")
+                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            NuevaPregunta();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .show();
+        else
+            new AlertDialog.Builder(this)
+                    .setTitle("Respuesta Erronea")
+                    .setNeutralButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            NuevaPregunta();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
     }
 
     public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
